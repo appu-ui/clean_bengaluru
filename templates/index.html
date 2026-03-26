@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clean Bengaluru | Report Garbage Spots</title>
+    <meta name="description" content="Help make Bengaluru clean by reporting uncollected garbage spots directly to the authorities with tracking and automated escalation.">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script>
+        window.googleMapsApiKey = "{{ google_maps_api_key }}";
+    </script>
+</head>
+<body>
+    <nav class="glass-nav">
+        <div class="nav-container">
+            <h1 class="logo">🌿 Clean Bengaluru</h1>
+            <ul class="nav-links">
+                <li><a href="#report-section">Report a Spot</a></li>
+                <li><a href="#how-it-works">How it Works</a></li>
+                <li><a href="#admin-section">Tracking</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Report Garbage Spots in Bengaluru</h1>
+            <p class="hero-subtitle">Let's make Bengaluru clean together! Snap a photo, drop a pin, and we'll automatically report it to the BBMP until it's resolved.</p>
+            <a href="#report-section" class="btn btn-primary pulse-btn">Report Now</a>
+        </div>
+    </header>
+
+    <main>
+        <section id="report-section" class="workspace">
+            <div class="workspace-container">
+                <div class="map-container glass-card">
+                    <div class="map-toolbar">
+                        <h3>Garbage Spots Map</h3>
+                        <div class="map-actions">
+                            <button id="btn-my-location" class="btn btn-secondary" type="button">📍 Use My Location</button>
+                            <button id="btn-clear-pin" class="btn btn-danger-outline" type="button">Clear Pin</button>
+                        </div>
+                    </div>
+                    <div id="map"></div>
+                    <p class="helper-text">ℹ️ Click anywhere on the map or drag the pin to set the location.</p>
+                </div>
+
+                <div class="form-container glass-card">
+                    <h2 id="form-title">Report a New Spot</h2>
+                    <form id="report-form" enctype="multipart/form-data">
+                        <input type="hidden" id="form-lat" name="lat">
+                        <input type="hidden" id="form-lng" name="lng">
+                        
+                        <div class="form-group">
+                            <label>Location coordinates</label>
+                            <div class="coordinates-display" id="coords-display">Click on the map to select location</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="before_image">Upload "Before" Photo *</label>
+                            <input type="file" id="before_image" name="before_image" accept="image/png, image/jpeg" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description">Description (optional)</label>
+                            <textarea id="description" name="description" rows="3" placeholder="E.g., Garbage blocking the sidewalk..."></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary submit-btn">Submit Report</button>
+                    </form>
+
+                    <div id="resolve-container" style="display: none;">
+                        <hr>
+                        <h3>Mark as Resolved</h3>
+                        <p>Spot ID: <span id="resolve-spot-id"></span></p>
+                        <form id="resolve-form" enctype="multipart/form-data">
+                            <input type="hidden" id="resolve-id-input">
+                            <div class="form-group">
+                                <label for="after_image">Upload "After" Photo *</label>
+                                <input type="file" id="after_image" name="after_image" accept="image/png, image/jpeg" required>
+                            </div>
+                            <button type="submit" class="btn btn-success submit-btn">Verify & Resolve</button>
+                            <button type="button" id="btn-cancel-resolve" class="btn btn-secondary submit-btn">Cancel</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="how-it-works" class="info-section">
+            <h2 class="section-title">How it Works</h2>
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-icon">📸</div>
+                    <h3>1. Photo + Location</h3>
+                    <p>Drop a pin on the affected area and upload a clear photo of the garbage.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-icon">🤖</div>
+                    <h3>2. Automated Alerts</h3>
+                    <p>We log the report. After 2, 4, and 7 days, our system automatically escalates the issue to the BBMP via email.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-icon">✅</div>
+                    <h3>3. Close with Proof</h3>
+                    <p>When the area is cleaned, upload an "After" photo to mark the spot as resolved. Accountability made easy.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="info-section">
+            <h2 class="section-title">Quick tips — Do's & Don'ts</h2>
+            
+            <div class="email-recipients-card glass-card" style="margin-bottom: 2rem; text-align: center; padding: 1.5rem; border: 1px solid var(--primary);">
+                <h3>📧 Who receives the emails?</h3>
+                <p style="margin-top:0.5rem;"><strong>Primary:</strong> specialswmbbmp@gmail.com</p>
+                <p><strong>Escalation:</strong> spcomswm@bbmp.gov.in</p>
+            </div>
+
+            <div class="dd-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                <div class="dos glass-card" style="background: rgba(220, 252, 231, 0.7); border-color: rgba(74, 222, 128, 0.3);">
+                    <h3>✔️ Do's</h3>
+                    <ul style="padding-left: 1.5rem; margin-top: 1rem;">
+                        <li style="margin-bottom: 0.5rem;">Take a clear photo showing the exact location and any nearby landmark.</li>
+                        <li style="margin-bottom: 0.5rem;">Include a brief description of the issue and any safety concerns.</li>
+                        <li style="margin-bottom: 0.5rem;">Pin the exact spot on the map before submitting.</li>
+                    </ul>
+                </div>
+                <div class="donts glass-card" style="background: rgba(254, 226, 226, 0.7); border-color: rgba(248, 113, 113, 0.3);">
+                    <h3>❌ Don'ts</h3>
+                    <ul style="padding-left: 1.5rem; margin-top: 1rem;">
+                        <li style="margin-bottom: 0.5rem;">Do not upload spam or irrelevant images.</li>
+                        <li style="margin-bottom: 0.5rem;">Do not upload personal photos or images containing private information — these reports are emailed to officials.</li>
+                        <li style="margin-bottom: 0.5rem;">Do not submit duplicate reports for the same spot unless conditions persist.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="admin-section" class="admin-section">
+            <div class="glass-card">
+                <div class="admin-header">
+                    <h2>Recent Reports Tracking</h2>
+                    <div class="filter-group">
+                        <label for="status-filter">Filter Status:</label>
+                        <select id="status-filter">
+                            <option value="All">All</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Resolved">Resolved</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table id="reports-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Reported On</th>
+                                <th>Location</th>
+                                <th>Status</th>
+                                <th>Before Image</th>
+                                <th>After Image</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Clean Bengaluru. Building a better city, together. 🏙️</p>
+    </footer>
+
+    <!-- Include Google Maps API Script -->
+    <script>
+        (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
+            key: window.googleMapsApiKey,
+            v: "weekly",
+        });
+    </script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
