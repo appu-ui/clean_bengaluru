@@ -1,11 +1,13 @@
 let map;
 let marker;
 let allMarkers = [];
+let geocoder;
 
 async function initMap() {
     // google maps is loaded async via inline script in head which adds it to window
     const { Map } = await google.maps.importLibrary("maps");
     const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+    geocoder = new google.maps.Geocoder();
 
     const defaultLocation = { lat: 12.9716, lng: 77.5946 }; // Bengaluru
 
@@ -78,7 +80,23 @@ function updateFormCoords(lat, lng) {
     
     document.getElementById("form-lat").value = latitude;
     document.getElementById("form-lng").value = longitude;
-    document.getElementById("coords-display").innerText = `Lat: ${latitude.toFixed(5)}, Lng: ${longitude.toFixed(5)}`;
+    document.getElementById("coords-display").innerText = `Lat: ${latitude.toFixed(5)}, Lng: ${longitude.toFixed(5)}\nLocating area...`;
+
+    if (geocoder) {
+        geocoder.geocode({ location: { lat: latitude, lng: longitude } }, (results, status) => {
+            if (status === "OK" && results[0]) {
+                let areaName = results[0].formatted_address;
+                document.getElementById("coords-display").innerText = `📍 Map area located:\n(Lat: ${latitude.toFixed(4)}, Lng: ${longitude.toFixed(4)})`;
+                
+                let areaInput = document.getElementById("area");
+                if (areaInput) {
+                    areaInput.value = areaName;
+                }
+            } else {
+                document.getElementById("coords-display").innerText = `Lat: ${latitude.toFixed(5)}, Lng: ${longitude.toFixed(5)}\n(Could not fetch area name)`;
+            }
+        });
+    }
 }
 
 async function fetchAndLogReports(AdvancedMarkerElement) {
@@ -134,15 +152,27 @@ async function fetchAndLogReports(AdvancedMarkerElement) {
 function renderTable(reports) {
     const tbody = document.querySelector("#reports-table tbody");
     tbody.innerHTML = "";
-    const filter = document.getElementById("status-filter").value;
+    
+    const statusFilter = document.getElementById("status-filter").value;
+    const dateFilter = document.getElementById("date-filter").value;
+    const areaFilter = document.getElementById("area-filter").value.toLowerCase();
 
     reports.forEach(r => {
-        if (filter !== "All" && r.status !== filter) return;
+        if (statusFilter !== "All" && r.status !== statusFilter) return;
+        
+        if (dateFilter) {
+            const reportDate = new Date(r.created_at).toISOString().split('T')[0];
+            if (reportDate !== dateFilter) return;
+        }
+
+        const areaText = (r.area || "").toLowerCase();
+        if (areaFilter && !areaText.includes(areaFilter)) return;
         
         const tr = document.createElement("tr");
         tr.innerHTML = `
             <td>#${r.id}</td>
             <td>${new Date(r.created_at).toLocaleDateString()}</td>
+            <td>${r.area || '-'}</td>
             <td>${r.lat.toFixed(4)}, ${r.lng.toFixed(4)}</td>
             <td><span class="badge ${r.status.toLowerCase()}">${r.status}</span></td>
             <td><a href="/static/uploads/${r.before_image}" target="_blank" class="action-link">View Image</a></td>
@@ -247,7 +277,9 @@ document.getElementById("btn-cancel-resolve").addEventListener("click", () => {
     document.getElementById("resolve-form").reset();
 });
 
-document.getElementById("status-filter").addEventListener("change", async () => {
-    const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
-    fetchAndLogReports(AdvancedMarkerElement);
+['status-filter', 'area-filter', 'date-filter'].forEach(id => {
+    document.getElementById(id).addEventListener("input", async () => {
+        const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+        fetchAndLogReports(AdvancedMarkerElement);
+    });
 });

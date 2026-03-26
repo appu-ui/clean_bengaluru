@@ -18,6 +18,7 @@
                 <li><a href="#report-section">Report a Spot</a></li>
                 <li><a href="#how-it-works">How it Works</a></li>
                 <li><a href="#admin-section">Tracking</a></li>
+                <li><a href="#get-involved">🤝 Get Involved</a></li>
             </ul>
         </div>
     </nav>
@@ -54,6 +55,11 @@
                         <div class="form-group">
                             <label>Location coordinates</label>
                             <div class="coordinates-display" id="coords-display">Click on the map to select location</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="area">Area / Locality *</label>
+                            <input type="text" id="area" name="area" placeholder="e.g. Koramangala 4th Block" required>
                         </div>
 
                         <div class="form-group">
@@ -137,17 +143,54 @@
             </div>
         </section>
 
+        <section id="get-involved" class="info-section">
+            <h2 class="section-title">🤝 Get Involved Locally</h2>
+            <p style="text-align: center; color: var(--text-muted); margin-top: -2rem; margin-bottom: 3rem; font-size: 1.1rem;">
+                Don't just report—join the movement! There are many communities and organizations actively keeping Bengaluru clean.
+            </p>
+            <div class="community-grid">
+                <!-- SGKK -->
+                <a href="https://hsrcitizenforum.in/swachagraha-kalika-kendra" target="_blank" class="community-card glass-card">
+                    <div class="community-icon">🌱</div>
+                    <h3>SGKK - HSR Layout</h3>
+                    <p>Every Sunday, join volunteer activities in the park to learn practical waste management and composting.</p>
+                </a>
+                <!-- Indian Ploggers Army -->
+                <a href="https://www.theindianploggersarmy.com/" target="_blank" class="community-card glass-card">
+                    <div class="community-icon">🏃🏽‍♂️</div>
+                    <h3>Indian Ploggers Army</h3>
+                    <p>Plog (Jog + Clean) every weekend! Stay fit while cleaning up streets. Check their social media handles for locations.</p>
+                </a>
+                <!-- Sustainable Sunday's Blr -->
+                <a href="https://www.instagram.com/sustainable_sundays_blr/" target="_blank" class="community-card glass-card">
+                    <div class="community-icon">♻️</div>
+                    <h3>Sustainable Sunday's Blr</h3>
+                    <p>A weekly community drive focusing on sustainability and active cleanup drives across different parts of the city.</p>
+                </a>
+            </div>
+        </section>
+
         <section id="admin-section" class="admin-section">
             <div class="glass-card">
                 <div class="admin-header">
                     <h2>Recent Reports Tracking</h2>
-                    <div class="filter-group">
-                        <label for="status-filter">Filter Status:</label>
-                        <select id="status-filter">
-                            <option value="All">All</option>
-                            <option value="Pending">Pending</option>
-                            <option value="Resolved">Resolved</option>
-                        </select>
+                    <div class="filter-group" style="display: flex; gap: 1rem; align-items: flex-end; flex-wrap: wrap;">
+                        <div>
+                            <label for="area-filter">Filter Area:</label>
+                            <input type="text" id="area-filter" placeholder="e.g. Indiranagar" style="padding: 0.5rem; border-radius: 6px; border: 1px solid rgba(255,255,255,0.6); background: rgba(255,255,255,0.8); width: 140px;">
+                        </div>
+                        <div>
+                            <label for="date-filter">Filter Date:</label>
+                            <input type="date" id="date-filter" style="padding: 0.5rem; border-radius: 6px; border: 1px solid rgba(255,255,255,0.6); background: rgba(255,255,255,0.8);">
+                        </div>
+                        <div>
+                            <label for="status-filter">Filter Status:</label>
+                            <select id="status-filter" style="padding: 0.5rem; border-radius: 6px; border: 1px solid rgba(255,255,255,0.6); background: rgba(255,255,255,0.8);">
+                                <option value="All">All</option>
+                                <option value="Pending">Pending</option>
+                                <option value="Resolved">Resolved</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
                 <div class="table-responsive">
@@ -156,6 +199,7 @@
                             <tr>
                                 <th>ID</th>
                                 <th>Reported On</th>
+                                <th>Area</th>
                                 <th>Location</th>
                                 <th>Status</th>
                                 <th>Before Image</th>

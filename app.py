@@ -68,6 +68,7 @@ def create_report():
     lat = request.form.get('lat')
     lng = request.form.get('lng')
     description = request.form.get('description', '')
+    area = request.form.get('area', '')
 
     if not lat or not lng:
         return jsonify({'error': 'Missing coordinates'}), 400
@@ -81,6 +82,7 @@ def create_report():
         lng=float(lng),
         before_image=filename,
         description=description,
+        area=area,
         status='Pending'
     )
     db.session.add(new_report)
