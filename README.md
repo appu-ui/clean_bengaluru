@@ -83,4 +83,5 @@ Clean Bengaluru bridges the gap between citizens and city authorities by providi
 - Improves transparency in municipal waste management.
 - Reduces resolution delays through automated escalation.
 - Scalable for other smart city initiatives.
-  **live link:clean-bengaluru-beta.vercel.app**
+
+  **live link :  [https://clean-bengaluru-beta.vercel.app/](https://clean-bengaluru-beta.vercel.app/)**
