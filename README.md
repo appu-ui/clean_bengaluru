@@ -28,6 +28,53 @@ Clean Bengaluru bridges the gap between citizens and city authorities by providi
 - Database: SQLite
 - Maps Integration: Google Maps JavaScript API (Geocoding API)
 - Task Scheduling: APScheduler
+
+## 🛠️ Local Setup Instructions
+
+1. **Clone the Repository:**
+   ```bash
+   git clone https://github.com/appu-ui/clean_bengaluru.git
+   cd clean_bengaluru
+   ```
+
+2. **Set up a Virtual Environment**:
+   ```bash
+   python -m venv venv
+   # On Windows:
+   venv\Scripts\activate
+   # On Mac/Linux:
+   # source venv/bin/activate
+   ```
+
+3. **Install Dependencies**:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Environment Variables**:
+   Create a `.env` file in the root of the project with your configurations. E.g.:
+   ```env
+   GOOGLE_MAPS_API_KEY=your_actual_api_key_here
+   MAIL_SERVER=smtp.gmail.com
+   MAIL_PORT=587
+   MAIL_USE_TLS=True
+   MAIL_USERNAME=your_email@gmail.com
+   MAIL_PASSWORD=your_app_password
+   ```
+
+---
+
+## 🏁 Running the Application
+
+1. **Start the Flask Application**:
+   ```bash
+   python app.py
+   ```
+   *The SQLite database (`database.db`) will be automatically created on the first run.*
+
+2. **Access the Web App**:
+   Open a browser and navigate to: [http://127.0.0.1:5000/](http://127.0.0.1:5000/)
+
 - Email Service: SMTP (Gmail)
 - Other Tools: Jinja2, Flask Extensions
 
