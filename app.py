@@ -29,6 +29,8 @@ app.config['MAIL_DEFAULT_SENDER'] = app.config['MAIL_USERNAME']
 
 db.init_app(app)
 mail = Mail(app)
+with app.app_context():
+    db.create_all()
 
 # Ensure upload directory exists
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
